@@ -47,6 +47,18 @@ app.post("/api/v1/capture_intent/:id", async (req, res) => {
   }
 });
 
+// 4. Create a refund for the created intent
+app.post("/api/v1/create_refund/:id", async (req, res) => {
+  try {
+    const refund = await stripe.refunds.create({
+      payment_intent: req.params.id,
+    });
+    res.json(refund);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get("/", (req, res) => {
   return res.status(200).json({ status: true, message: "App is running" });
 });
