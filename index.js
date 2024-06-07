@@ -36,6 +36,17 @@ app.get("/api/v1/get_intents", async (req, res) => {
   }
 });
 
+// 3. Capture the created intent
+app.post("/api/v1/capture_intent/:id", async (req, res) => {
+  try {
+    const paymentIntent = await stripe.paymentIntents.retrieve(req.params.id);
+    res.json(paymentIntent);
+  } catch (error) {
+    console.log(error, "error in capturing intent");
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get("/", (req, res) => {
   return res.status(200).json({ status: true, message: "App is running" });
 });
